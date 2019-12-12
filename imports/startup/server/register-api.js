@@ -5,6 +5,7 @@ import { getUser } from 'meteor/apollo';
 import resolutionsSchema from '../../api/resolutions/resolutions.graphql';
 import resolutionsResolvers from '../../api/resolutions/resolvers';
 
+//
 const simpleType = `
   type Query {
     hi: String
