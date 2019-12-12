@@ -9,7 +9,7 @@ export default {
 
   Mutation: {
     createResolution: (obj, { name }, { user }) => {
-      const resolutionId = resolutionsColl.insert({ name, userId: user._id });
+      const resolutionId = resolutionsColl.insert({ name, userId: user ? user._id : null });
       return resolutionsColl.findOne(resolutionId);
     }
   }

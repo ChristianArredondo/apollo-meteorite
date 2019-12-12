@@ -4,12 +4,14 @@ import { getUser } from 'meteor/apollo';
 
 import resolutionsSchema from '../../api/resolutions/resolutions.graphql';
 import resolutionsResolvers from '../../api/resolutions/resolvers';
+import usersSchema from '../../api/users/users.graphql';
+import usersResolvers from '../../api/users/resolvers';
 
-//
 const simpleType = `
   type Query {
     hi: String
     resolutions: [Resolution]
+    user: User
   }
 `;
 const simpleResolver = {
@@ -26,8 +28,8 @@ const simpleResolver = {
  * - specify context for gql requests
  */
 const server = new ApolloServer({
-  typeDefs: [simpleType, resolutionsSchema],
-  resolvers: [simpleResolver, resolutionsResolvers],
+  typeDefs: [simpleType, resolutionsSchema, usersSchema],
+  resolvers: [simpleResolver, resolutionsResolvers, usersResolvers],
   context: async ({ req }) => ({
     user: await getUser(req.headers.authorization)
   })
