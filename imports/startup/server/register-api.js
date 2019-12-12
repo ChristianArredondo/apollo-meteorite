@@ -1,25 +1,20 @@
 import { ApolloServer } from 'apollo-server-express';
 import { WebApp } from 'meteor/webapp';
 import { getUser } from 'meteor/apollo';
-import ResolutionsSchema from '../../api/resolutions/resolutions.graphql';
 
-const typeDefs = `
+import resolutionsSchema from '../../api/resolutions/resolutions.graphql';
+import resolutionsResolvers from '../../api/resolutions/resolvers';
+
+const simpleType = `
   type Query {
     hi: String
     resolutions: [Resolution]
   }
 `;
-
-const resolvers = {
+const simpleResolver = {
   Query: {
     hi() {
       return 'hello from apollo';
-    },
-    resolutions() {
-      return [
-        { _id: 'some_id', name: 'some name' },
-        { _id: 'some_id_2', name: 'another thing' }
-      ];
     }
   }
 };
@@ -30,8 +25,8 @@ const resolvers = {
  * - specify context for gql requests
  */
 const server = new ApolloServer({
-  typeDefs: [typeDefs, ResolutionsSchema],
-  resolvers,
+  typeDefs: [simpleType, resolutionsSchema],
+  resolvers: [simpleResolver, resolutionsResolvers],
   context: async ({ req }) => ({
     user: await getUser(req.headers.authorization)
   })
