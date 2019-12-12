@@ -1,54 +1,44 @@
 import React from 'react';
 import gql from 'graphql-tag';
 import { graphql, withApollo } from 'react-apollo';
-import { Meteor } from 'meteor/meteor';
 
 import ResolutionForm from './ResolutionForm';
-import RegisterForm from './RegisterForm';
-import LoginForm from './LoginForm';
+import UserAuthSection from './UserAuthSection';
+import Resolutions from './Resolutions';
 
-const App = ({ isLoading, resolutions, hi, client }) => {
+const App = ({ isLoading, resolutions, client, user }) => {
   if (isLoading) return <p>Loading...</p>;
 
   return (
     <div>
-      <button
-        type="button"
-        onClick={() => {
-          Meteor.logout();
-          client.resetStore();
-        }}
-      >
-        Logout
-      </button>
-      <RegisterForm client={client} />
-      <LoginForm client={client} />
+      <UserAuthSection user={user} client={client} />
       <hr />
-      <h1> {hi} </h1>
       <ResolutionForm />
-      <ul>
-        {resolutions.map(resolution => (
-          <li key={resolution._id}>{resolution.name}</li>
-        ))}
-      </ul>
+      <Resolutions resolutions={resolutions} />
     </div>
   );
 };
 
-const resolutionsQueryGql = gql`
+const rootQueryGql = gql`
   query Resolutions {
     hi
     resolutions {
       _id
       name
     }
+    user {
+      _id
+      email
+    }
   }
 `;
 
-export default graphql(resolutionsQueryGql, {
-  props: ({ data }) => ({
-    isLoading: data.loading,
-    hi: data.hi,
-    resolutions: data.resolutions
-  })
+const mapDataToProps = ({ data }) => ({
+  isLoading: data.loading,
+  resolutions: data.resolutions,
+  user: data.user
+});
+
+export default graphql(rootQueryGql, {
+  props: mapDataToProps
 })(withApollo(App));
