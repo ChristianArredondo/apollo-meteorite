@@ -20,6 +20,7 @@ export default class RegisterForm extends Component {
     Meteor.loginWithPassword(this.state.email, this.state.password, error => {
       if (!error) {
         this.setState({ email: '', password: '' });
+        this.props.client.resetStore();
       }
     });
   };

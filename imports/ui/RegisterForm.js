@@ -20,6 +20,7 @@ export default class RegisterForm extends Component {
     Accounts.createUser({ email: this.state.email, password: this.state.password }, error => {
       if (!error) {
         this.setState({ email: '', password: '' });
+        this.props.client.resetStore();
       }
     });
   };

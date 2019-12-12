@@ -3,11 +3,7 @@ import resolutionsColl from './resolutions-coll';
 export default {
   Query: {
     resolutions: (obj, args, { user }) => {
-      if (user) {
-        return resolutionsColl.find({ userId: user._id }).fetch();
-      }
-
-      return [];
+      return resolutionsColl.find({ userId: user ? user._id : null }).fetch();
     }
   },
 
